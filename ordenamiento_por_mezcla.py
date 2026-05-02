@@ -1,23 +1,24 @@
-def ordenamiento_por_mezcla(lista):
+def ordenamiento_por_mezcla(lista, nivel=0):
 	"""
 	Ordena una lista usando el algoritmo de mezcla (merge sort).
 	Divide la lista en mitades, ordena cada mitad y luego las mezcla.
 	Complejidad: O(n log n)
 	"""
+	indent = '  ' * nivel
 	if len(lista) > 1:
-		# 1. Encontrar el punto medio y dividir la lista
 		medio = len(lista) // 2
 		izquierda = lista[:medio]
 		derecha = lista[medio:]
 
-		# 2. Ordenar recursivamente cada mitad
-		ordenamiento_por_mezcla(izquierda)
-		ordenamiento_por_mezcla(derecha)
+		print(f"{indent}{izquierda}")
+		print(f"{indent}{derecha}")
 
-		# 3. Mezclar las mitades ordenadas
-		i = 0  # índice para izquierda
-		j = 0  # índice para derecha
-		k = 0  # índice para lista principal
+		ordenamiento_por_mezcla(izquierda, nivel + 1)
+		ordenamiento_por_mezcla(derecha, nivel + 1)
+
+		i = 0
+		j = 0
+		k = 0
 
 		while i < len(izquierda) and j < len(derecha):
 			if izquierda[i] < derecha[j]:
@@ -28,7 +29,6 @@ def ordenamiento_por_mezcla(lista):
 				j += 1
 			k += 1
 
-		# Copiar los elementos restantes (si hay)
 		while i < len(izquierda):
 			lista[k] = izquierda[i]
 			i += 1
@@ -38,6 +38,8 @@ def ordenamiento_por_mezcla(lista):
 			lista[k] = derecha[j]
 			j += 1
 			k += 1
+
+		print(f"{indent}{lista}")
 
 
 if __name__ == "__main__":
