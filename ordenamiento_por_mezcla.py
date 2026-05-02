@@ -1,49 +1,66 @@
-def ordenamiento_por_mezcla(lista, nivel=0):
-	"""
-	Ordena una lista usando el algoritmo de mezcla (merge sort).
-	Divide la lista en mitades, ordena cada mitad y luego las mezcla.
-	Complejidad: O(n log n)
-	"""
-	indent = '  ' * nivel
-	if len(lista) > 1:
-		medio = len(lista) // 2
-		izquierda = lista[:medio]
-		derecha = lista[medio:]
+def merge_sort(arr, nivel=0):
+    """
+    Ordena una lista usando el algoritmo de mezcla (merge sort).
 
-		print(f"{indent}{izquierda}")
-		print(f"{indent}{derecha}")
+    Parámetros:
+        arr (list): Lista de elementos a ordenar.
 
-		ordenamiento_por_mezcla(izquierda, nivel + 1)
-		ordenamiento_por_mezcla(derecha, nivel + 1)
+    Retorna:
+        list: Nueva lista ordenada.
 
-		i = 0
-		j = 0
-		k = 0
+    El algoritmo divide la lista en mitades, ordena cada mitad recursivamente y luego las mezcla.
+    Complejidad temporal: O(n log n)
+    """
+    indent = '  ' * nivel
+    print(f"{indent}Dividiendo: {arr}")
+    if len(arr) <= 1:
+        print(f"{indent}Retornando: {arr}")
+        return arr
 
-		while i < len(izquierda) and j < len(derecha):
-			if izquierda[i] < derecha[j]:
-				lista[k] = izquierda[i]
-				i += 1
-			else:
-				lista[k] = derecha[j]
-				j += 1
-			k += 1
+    # Encontrar el punto medio y dividir la lista
+    mid = len(arr) // 2
+    left  = merge_sort(arr[:mid], nivel + 1)
+    right = merge_sort(arr[mid:], nivel + 1)
 
-		while i < len(izquierda):
-			lista[k] = izquierda[i]
-			i += 1
-			k += 1
-
-		while j < len(derecha):
-			lista[k] = derecha[j]
-			j += 1
-			k += 1
-
-		print(f"{indent}{lista}")
+    # Mezclar las dos mitades ordenadas
+    mezclada = merge(left, right)
+    print(f"{indent}Mezclando: {left} + {right} -> {mezclada}")
+    return mezclada
 
 
+def merge(left, right):
+    """
+    Mezcla dos listas ordenadas en una sola lista ordenada.
+
+    Parámetros:
+        left (list): Primera lista ordenada.
+        right (list): Segunda lista ordenada.
+
+    Retorna:
+        list: Nueva lista ordenada combinando ambas.
+    """
+    result = []  # Lista resultado
+    i = j = 0    # Punteros para recorrer left y right
+
+    # Comparar elementos de ambas listas y agregar el menor
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+
+    # Agregar los elementos restantes de left (si hay)
+    result.extend(left[i:])
+    # Agregar los elementos restantes de right (si hay)
+    result.extend(right[j:])
+    return result
+
+# Ejemplo de uso
 if __name__ == "__main__":
-	lista = [38, 27, 43, 3, 9, 82, 10]
-	print("Lista original:", lista)
-	ordenamiento_por_mezcla(lista)
-	print("Lista ordenada:", lista)
+    arr = [38, 27, 43, 3, 9, 82, 10]
+    print("Lista original:", arr)
+    print("\nProceso de ordenamiento:")
+    resultado = merge_sort(arr)
+    print("\nLista ordenada:", resultado)  # [3, 9, 10, 27, 38, 43, 82]
